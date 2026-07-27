@@ -1,6 +1,9 @@
 name: Deploy to WordPress.org
 
 on:
+  push:
+    branches:
+      - main
   release:
     types: [published]
 
@@ -9,11 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Deploy plugin to WordPress.org
+      - name: Deploy to WordPress.org
         uses: 10up/action-wordpress-plugin-deploy@stable
-        env:
-          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        with:
+          svn_username: ${{ secrets.SVN_USERNAME }}
+          svn_password: ${{ secrets.SVN_PASSWORD }}
