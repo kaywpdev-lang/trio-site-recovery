@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Trio Site Recovery
  * Description: Recover a broken WordPress frontend from wp-admin.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: triosis
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html

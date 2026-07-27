@@ -4,7 +4,7 @@ Tags: recovery, safe mode, debug, error log, site health
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,5 +50,5 @@ It creates a snapshot, disables active plugins, and switches to an available def
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.1=
 * Initial release.
