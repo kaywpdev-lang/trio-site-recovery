@@ -8,26 +8,25 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Recover common WordPress frontend issues directly from wp-admin.
-
+Recover your broken WordPress site safely from the WordPress dashboard—no FTP, cPanel, SSH, or database access required.
 == Description ==
 
 Trio Site Recovery helps administrators recover a broken WordPress frontend when wp-admin is still accessible.
 
 The plugin provides recovery tools for common WordPress issues without requiring FTP, cPanel, SSH, or direct database access.
 
-Features include:
+== Features ==
 
-* Site Health Dashboard
-* Emergency Recovery
-* Safe Mode
-* Snapshot Creation
-* Restore Latest Snapshot
-* Theme Recovery
-* Quick Plugin Disable
-* Runtime Debug Manager
-* Error Log Viewer
-* Recovery History
+* Emergency Recovery – Recover your website with a single click.
+* Safe Mode – Disable plugins temporarily for troubleshooting.
+* Site Health Dashboard – Monitor your site's recovery status.
+* Snapshot Creation – Create restore points before making changes.
+* Snapshot Restore – Restore your latest recovery snapshot.
+* Theme Recovery – Switch to a safe default theme instantly.
+* Plugin Manager – Quickly disable problematic plugins.
+* Runtime Debug Manager – Enable debugging without editing wp-config.php.
+* Error Log Viewer – View PHP errors directly from wp-admin.
+* Recovery History – Track all recovery operations.
 
 == Installation ==
 
