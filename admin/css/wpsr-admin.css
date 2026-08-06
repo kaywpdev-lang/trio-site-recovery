@@ -278,3 +278,5 @@
         width: 100%;
     }
 }
+/* Deactivation feedback modal */
+.wpsr-feedback-modal{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;padding:20px}.wpsr-feedback-modal.is-open{display:flex}.wpsr-feedback-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55)}.wpsr-feedback-dialog{position:relative;z-index:1;width:min(520px,100%);max-height:90vh;overflow:auto;padding:28px;border-radius:10px;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.25)}.wpsr-feedback-dialog h2{margin:0 35px 8px 0}.wpsr-feedback-dialog p{color:#646970}.wpsr-feedback-dialog label{display:block;margin:12px 0}.wpsr-feedback-dialog textarea{width:100%;margin-top:10px}.wpsr-feedback-close{position:absolute;right:15px;top:12px;border:0;background:transparent;font-size:28px;cursor:pointer}.wpsr-feedback-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.wpsr-feedback-error{margin-top:12px;color:#b32d2e}@media(max-width:600px){.wpsr-feedback-actions{flex-direction:column-reverse}.wpsr-feedback-actions .button{width:100%}}

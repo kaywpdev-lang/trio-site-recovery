@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Trio Site Recovery
  * Description: Recover a broken WordPress frontend from wp-admin.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: triosis
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('WPSR_VERSION', '1.0.0');
+define('WPSR_VERSION', '1.0.2');
 define('WPSR_FILE', __FILE__);
 define('WPSR_PATH', plugin_dir_path(__FILE__));
 define('WPSR_URL', plugin_dir_url(__FILE__));

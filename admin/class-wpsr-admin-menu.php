@@ -10,6 +10,7 @@ class WPSR_Admin_Menu {
         add_action('admin_menu', array($this, 'register_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_assets'));
         add_action('admin_init', array($this, 'handle_post_actions'));
+        add_action('wp_ajax_wpsr_save_deactivation_feedback', array($this, 'save_deactivation_feedback'));
     }
     public function register_menu() {
         add_menu_page(
@@ -24,16 +25,128 @@ class WPSR_Admin_Menu {
     }
 
     public function enqueue_assets($hook) {
-        if ('toplevel_page_trio-site-recovery' !== $hook) {
+        if ('toplevel_page_trio-site-recovery' === $hook) {
+            wp_enqueue_style(
+                'wpsr-admin',
+                WPSR_URL . 'admin/css/wpsr-admin.css',
+                array(),
+                WPSR_VERSION
+            );
+        }
+
+        if ('plugins.php' !== $hook) {
             return;
         }
 
         wp_enqueue_style(
-            'wpsr-admin',
+            'wpsr-deactivation-feedback',
             WPSR_URL . 'admin/css/wpsr-admin.css',
             array(),
             WPSR_VERSION
         );
+
+        wp_enqueue_script(
+            'wpsr-deactivation-feedback',
+            WPSR_URL . 'admin/js/wpsr-deactivation-feedback.js',
+            array(),
+            WPSR_VERSION,
+            true
+        );
+
+        wp_localize_script(
+            'wpsr-deactivation-feedback',
+            'wpsrFeedback',
+            array(
+                'pluginFile' => plugin_basename(WPSR_FILE),
+                'ajaxUrl'    => admin_url('admin-ajax.php'),
+                'nonce'      => wp_create_nonce('wpsr_deactivation_feedback_nonce'),
+            )
+        );
+    }
+
+    public function save_deactivation_feedback() {
+        check_ajax_referer('wpsr_deactivation_feedback_nonce', 'nonce');
+
+        if (!current_user_can('activate_plugins')) {
+            wp_send_json_error(array('message' => __('Permission denied.', 'trio-site-recovery')), 403);
+        }
+
+        $reason = isset($_POST['reason']) ? sanitize_key(wp_unslash($_POST['reason'])) : '';
+        $details = isset($_POST['details']) ? sanitize_textarea_field(wp_unslash($_POST['details'])) : '';
+
+        $allowed_reasons = array(
+            'setup_difficult',
+            'not_working',
+            'missing_feature',
+            'found_alternative',
+            'temporary',
+            'other',
+        );
+
+        if (!in_array($reason, $allowed_reasons, true)) {
+            wp_send_json_error(array('message' => __('Please select a valid reason.', 'trio-site-recovery')), 400);
+        }
+
+        $feedback = get_option('wpsr_deactivation_feedback', array());
+        if (!is_array($feedback)) {
+            $feedback = array();
+        }
+
+        $feedback[] = array(
+            'reason'     => $reason,
+            'details'    => $details,
+            'version'    => WPSR_VERSION,
+            'created_at' => current_time('mysql'),
+        );
+
+        update_option('wpsr_deactivation_feedback', array_slice($feedback, -50), false);
+        $reason_labels = array(
+    'setup_difficult'  => 'Setup was difficult',
+    'not_working'      => 'Plugin did not work',
+    'missing_feature'  => 'A feature is missing',
+    'found_alternative'=> 'Found another plugin',
+    'temporary'        => 'Temporary deactivation',
+    'other'            => 'Other',
+);
+
+$reason_label = isset($reason_labels[$reason])
+    ? $reason_labels[$reason]
+    : $reason;
+
+$owner_email = 'kay.wpdev@gmail.com';
+
+$subject = sprintf(
+    '[Trio Site Recovery] Deactivation: %s',
+    $reason_label
+);
+
+$message = sprintf(
+    "A user has deactivated Trio Site Recovery.\n\n" .
+    "Reason: %s\n" .
+    "Additional Details: %s\n" .
+    "Plugin Version: %s\n" .
+    "WordPress Version: %s\n" .
+    "Website: %s\n" .
+    "Submitted At: %s\n",
+    $reason_label,
+    !empty($details) ? $details : 'No additional details provided.',
+    WPSR_VERSION,
+    get_bloginfo('version'),
+    home_url(),
+    current_time('mysql')
+);
+
+$headers = array(
+    'Content-Type: text/plain; charset=UTF-8',
+);
+
+$mail_sent = wp_mail(
+    $owner_email,
+    $subject,
+    $message,
+    $headers
+);
+        wp_send_json_success(array('message' => __('Feedback saved.', 'trio-site-recovery')));
     }
 
     private function resolve_plugin_file($action_target) {
